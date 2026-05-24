@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "yourdockerhub/banana-app"
+        IMAGE_NAME = "tprff2301/banana-app"
     }
 
     stages {
 
         stage('Build') {
             steps {
-                sh 'docker build -t $IMAGE_NAME:latest .'
+                sh 'docker build -t $banana-app:latest .'
             }
         }
 
@@ -24,7 +24,7 @@ pipeline {
 
                     sh '''
                     echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                    docker push $IMAGE_NAME:latest
+                    docker push $banana-app:latest
                     '''
                 }
             }
