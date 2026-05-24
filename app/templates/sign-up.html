@@ -6,6 +6,7 @@
     <title>Monkey Login</title>
 
     <style>
+
         body {
             font-family: Arial, sans-serif;
             background-color: #1e1e1e;
@@ -31,15 +32,19 @@
         }
 
         input {
+
             width: 100%;
             padding: 12px;
             margin-top: 10px;
 
             border: none;
             border-radius: 5px;
+
+            box-sizing: border-box;
         }
 
         button {
+
             width: 100%;
             padding: 12px;
             margin-top: 15px;
@@ -47,12 +52,15 @@
             border: none;
             border-radius: 5px;
 
-            background-color: #4CAF50;
             color: white;
             cursor: pointer;
         }
 
-        button:hover {
+        .login-btn {
+            background-color: #4CAF50;
+        }
+
+        .login-btn:hover {
             background-color: #45a049;
         }
 
@@ -63,7 +71,9 @@
         .signup-btn:hover {
             background-color: #1976D2;
         }
+
     </style>
+
 </head>
 
 <body>
@@ -72,19 +82,57 @@
 
     <h1>🐒 Monkey Auth</h1>
 
-    <form action="/home">
+    <!-- LOGIN FORM -->
+    <form action="/login" method="POST">
 
-        <input type="text" placeholder="Username">
+        <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            required
+        >
 
-        <input type="password" placeholder="Password">
+        <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+        >
 
-        <button type="submit">Log In</button>
+        <button
+            type="submit"
+            class="login-btn"
+        >
+            Log In
+        </button>
 
     </form>
 
-    <button class="signup-btn">
-        Sign Up
-    </button>
+    <!-- SIGNUP FORM -->
+    <form action="/signup" method="POST">
+
+        <input
+            type="text"
+            name="username"
+            placeholder="New Username"
+            required
+        >
+
+        <input
+            type="password"
+            name="password"
+            placeholder="New Password"
+            required
+        >
+
+        <button
+            type="submit"
+            class="signup-btn"
+        >
+            Sign Up
+        </button>
+
+    </form>
 
 </div>
 
