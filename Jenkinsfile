@@ -9,7 +9,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'docker build -t $banana-app:latest .'
+                sh 'docker build -t $IMAGE_NAME:latest .'
             }
         }
 
@@ -24,7 +24,7 @@ pipeline {
 
                     sh '''
                     echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                    docker push $banana-app:latest
+                    docker push $IMAGE_NAME:latest
                     '''
                 }
             }
