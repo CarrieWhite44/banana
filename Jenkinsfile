@@ -43,7 +43,7 @@ pipeline {
                     docker stop myapp || true
                     docker rm myapp || true
 
-                    docker run -d --name myapp -p 8000:8000 $IMAGE_NAME:latest
+                    docker run -d --name myapp -p 5000:5000 $IMAGE_NAME:latest
 
                     EOF
                     """
