@@ -18,7 +18,6 @@ pipeline {
 
         stage('Push') {
             steps {
-
                 withCredentials([usernamePassword(
                     credentialsId: 'banana',
                     usernameVariable: 'DOCKER_USER',
@@ -27,7 +26,6 @@ pipeline {
 
                     sh '''
                     echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-
                     docker push $IMAGE_NAME:latest
                     '''
                 }
@@ -35,20 +33,18 @@ pipeline {
         }
 
         stage('Deploy to EC2') {
-
             steps {
-
-                sh '''
-                eval "$(ssh-agent -s)"
+                sh """
+                eval \"\$(ssh-agent -s)\"
                 ssh-add /var/jenkins_home/.ssh/banana.pem
-                ssh -o StrictHostKeyChecking=no ubuntu@EC2_IP << 'EOF'
-                docker pull tprff2301/banana-app:latest
-                docker stop app || true
-                docker rm app || true
-                docker run -d -p 80:5000 tprff2301/banana-app:latest
+
+                ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_IP} << 'EOF'
+                    docker pull ${IMAGE_NAME}:latest
+                    docker stop app || true
+                    docker rm app || true
+                    docker run -d -p 80:5000 ${IMAGE_NAME}:latest
                 EOF
-                '''
-                }
+                """
             }
         }
     }
