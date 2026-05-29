@@ -34,7 +34,7 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                sshagent(['banana']) {
+                sshagent(['ubuntu']) {
                     sh """
                     ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} '
                         docker pull tprff2301/banana-app:latest
