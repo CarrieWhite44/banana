@@ -38,18 +38,16 @@ pipeline {
 
             steps {
 
-                sshagent(['ec2-ssh']) {
-
-                    sh '''
-                    ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_IP "
-
-                    cd banana-app &&
-
-                    docker compose pull &&
-
-                    docker compose up -d
-                    "
-                    '''
+                sh '''
+                eval "$(ssh-agent -s)"
+                ssh-add /var/jenkins_home/.ssh/banana.pem
+                ssh -o StrictHostKeyChecking=no ubuntu@EC2_IP << 'EOF'
+                docker pull tprff2301/banana-app:latest
+                docker stop app || true
+                docker rm app || true
+                docker run -d -p 80:5000 tprff2301/banana-app:latest
+                EOF
+                '''
                 }
             }
         }
