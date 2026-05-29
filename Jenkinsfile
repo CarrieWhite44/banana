@@ -34,15 +34,17 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                sshagent(['ubuntu']) {
-                    sh '''
-                    ssh -o StrictHostKeyChecking=no ubuntu@13.62.19.59 << 'EOF'
+                sshagent(['banana']) {
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} '
                         docker pull tprff2301/banana-app:latest
+
                         docker stop app || true
                         docker rm app || true
-                        docker run -d -p 80:5000 tprff2301/banana-app:latest
-                    EOF
-                    '''
+
+                        docker run -d --name app -p 8080:5000 tprff2301/banana-app:latest
+                    '
+                    """
                 }
             }
         }
