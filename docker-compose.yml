@@ -3,38 +3,47 @@ version: '3.9'
 services:
 
   web:
-    build: tprff2301/banana-app:latest
+    image: tprff2301/banana-app:latest
     container_name: banana_app
+
     ports:
       - "5000:5000"
-    volumes:
-      - .:/app
+
     environment:
       - DB_USER=monkeyuser
       - DB_PASSWORD=banana123
       - DB_NAME=monkeydb
       - DB_HOST=db
+
     depends_on:
       - db
 
   db:
     image: postgres:15
+
     container_name: banana_db
+
     restart: always
+
     environment:
       POSTGRES_USER: monkeyuser
       POSTGRES_PASSWORD: banana123
       POSTGRES_DB: monkeydb
+
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
   nginx:
     image: nginx:latest
+
     container_name: banana_nginx
+
     ports:
       - "80:80"
+
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+
     depends_on:
       - web
 

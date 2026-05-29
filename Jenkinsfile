@@ -1,9 +1,10 @@
 pipeline {
+
     agent any
 
     environment {
         IMAGE_NAME = "tprff2301/banana-app"
-        EC2_IP = "16.170.250.135"
+        EC2_IP = "13.62.19.59"
         EC2_USER = "ubuntu"
     }
 
@@ -26,30 +27,31 @@ pipeline {
 
                     sh '''
                     echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
                     docker push $IMAGE_NAME:latest
                     '''
                 }
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to EC2') {
+
             steps {
-                sshagent(credentials: ['banana']) {
-                    sh """
-                    ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_IP << 'EOF'
 
-                    docker pull $IMAGE_NAME:latest
+                sshagent(['ec2-ssh']) {
 
-                    docker stop myapp || true
-                    docker rm myapp || true
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_IP "
 
-                    docker run -d --name myapp -p 5000:5000 $IMAGE_NAME:latest
+                    cd banana-app &&
 
-                    EOF
-                    """
+                    docker compose pull &&
+
+                    docker compose up -d
+                    "
+                    '''
                 }
             }
         }
-
     }
 }
