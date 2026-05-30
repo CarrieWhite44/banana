@@ -11,7 +11,7 @@ DB_NAME = os.getenv("DB_NAME")
 DB_HOST = os.getenv("DB_HOST")
 
 app.config["SQLALCHEMY_DATABASE_URI"] = \
-    "postgresql://monkeyuser:banana123@db:5432/monkeydb"
+    "postgresql://monkeyuser:banana123@banana_db:5432/monkeydb"
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
