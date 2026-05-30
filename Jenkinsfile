@@ -4,7 +4,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "tprff2301/banana-app"
-        EC2_IP = "13.62.19.59"
+        EC2_IP = "13.63.154.146"
         EC2_USER = "ubuntu"
     }
 
