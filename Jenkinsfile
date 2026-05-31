@@ -37,6 +37,8 @@ pipeline {
                 sshagent(['ubuntu']) {
                     sh """
                     ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} '
+                    cd banana-app
+                    
                     docker compose pull
 
                     docker compose down
