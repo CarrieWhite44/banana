@@ -37,12 +37,11 @@ pipeline {
                 sshagent(['ubuntu']) {
                     sh """
                     ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} '
-                        docker pull tprff2301/banana-app:latest
+                    docker compose pull
 
-                        docker stop app || true
-                        docker rm app || true
+                    docker compose down
 
-                        docker run -d --name app -p 8080:5000 tprff2301/banana-app:latest
+                    docker compose up -d
                     '
                     """
                 }
