@@ -1,3 +1,14 @@
+terraform {
+  backend "s3" {
+    bucket         = "my-unique-banana-tfstate-bucket" # Имя вашего бакета из Шага 1
+    key            = "banana/terraform/terraform.tfstate"        # Путь к файлу внутри бакета
+    region         = "eu-north-1"                       # Ваш регион AWS
+  }
+}
+
+# Далее идет ваш текущий код: resource "aws_security_group" "banana_sg" ...
+
+
 resource "aws_security_group" "banana_sg" {
 
   name = "banana-sg"
