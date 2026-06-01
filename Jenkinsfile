@@ -4,7 +4,6 @@ pipeline {
 
     environment {
         IMAGE_NAME = "tprff2301/banana-app"
-        EC2_IP = "13.63.154.146"
         EC2_USER = "ubuntu"
     }
 
@@ -31,6 +30,22 @@ pipeline {
                 }
             }
         }
+        stage('Get IP') {
+
+        steps {
+
+            script {
+
+                env.EC2_IP = sh(
+                    script: '''
+                    cd terraform
+                    terraform output -raw ec2_ip
+                    ''',
+                    returnStdout: true
+                ).trim()
+            }
+        }
+    }
 
         stage('Deploy to EC2') {
             steps {
@@ -49,5 +64,6 @@ pipeline {
                 }
             }
         }
+
     }
 }
