@@ -35,8 +35,8 @@ stage('Get IP') {
         // Убедитесь, что у вас в Jenkins добавлены Credentials типа "Secret text" 
         // с ID 'aws-access-key' и 'aws-secret-key'
         withCredentials([
-            string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
-            string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
+            string(credentialsId: 'ec2-ssh', variable: 'AWS_ACCESS_KEY_ID'),
+            string(credentialsId: 'ec2-ssh', variable: 'AWS_SECRET_ACCESS_KEY')
         ]) {
             script {
                 env.EC2_IP = sh(
@@ -44,7 +44,7 @@ stage('Get IP') {
                     cd terraform
                     
                     # Задаем дефолтный регион для AWS провайдера внутри контейнера
-                    export AWS_DEFAULT_REGION="us-east-1"
+                    export AWS_DEFAULT_REGION="eu-north-1"
                     
                     # 1. Инициализируем Terraform (он автоматически скачает state из S3)
                     terraform init -input=false -no-color
@@ -65,7 +65,6 @@ stage('Get IP') {
                 sshagent(['ubuntu']) {
                     sh """
                     ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} '
-                    cd banana-app
                     
                     docker compose pull
 
