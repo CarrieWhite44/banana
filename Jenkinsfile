@@ -31,7 +31,7 @@ pipeline {
             }
         }
 stage('Get IP') {
-    steps { {
+    steps { 
             script {
                 env.EC2_IP = sh(
                     script: '''
