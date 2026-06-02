@@ -31,25 +31,29 @@ pipeline {
             }
         }
 stage('Get IP') {
-    steps { 
+    steps {
+        // Убедитесь, что у вас в Jenkins добавлены Credentials типа "Secret text" 
+        // с ID 'aws-access-key' и 'aws-secret-key'
+            withCredentials([
+            [$class: 'AmazonWebServicesCredentialsBinding',
+            credentialsId: 'banana-aws-key']
+        ]) {
+
             script {
                 env.EC2_IP = sh(
                     script: '''
                     cd terraform
-                    
-                    # Задаем дефолтный регион для AWS провайдера внутри контейнера
-                    export AWS_DEFAULT_REGION="eu-north-1"
-                    
-                    # 1. Инициализируем Terraform (он автоматически скачает state из S3)
+
+                    export AWS_DEFAULT_REGION=eu-north-1
+
                     terraform init -input=false -no-color
-                    
-                    # 2. Получаем IP-адрес напрямую из облачного состояния
+
                     terraform output -raw ec2_ip
                     ''',
                     returnStdout: true
                 ).trim()
             }
-        }
+        } 
     }
 }
 
