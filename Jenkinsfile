@@ -35,8 +35,8 @@ stage('Get IP') {
         // Убедитесь, что у вас в Jenkins добавлены Credentials типа "Secret text" 
         // с ID 'aws-access-key' и 'aws-secret-key'
         withCredentials([
-            string(credentialsId: 'ec2-ssh', variable: 'AWS_ACCESS_KEY_ID'),
-            string(credentialsId: 'ec2-ssh', variable: 'AWS_SECRET_ACCESS_KEY')
+            string(credentialsId: 'banana', variable: 'AWS_ACCESS_KEY_ID'),
+            string(credentialsId: 'banana', variable: 'AWS_SECRET_ACCESS_KEY')
         ]) {
             script {
                 env.EC2_IP = sh(
