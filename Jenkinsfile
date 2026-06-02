@@ -30,32 +30,33 @@ pipeline {
                 }
             }
         }
-stage('Get IP') {
-    steps {
-        // Убедитесь, что у вас в Jenkins добавлены Credentials типа "Secret text" 
-        // с ID 'aws-access-key' и 'aws-secret-key'
-            withCredentials([
-            [$class: 'AmazonWebServicesCredentialsBinding',
-            credentialsId: 'banana-aws-key']
-        ]) {
+        stage('Get IP') {
+            steps {
+                withCredentials([
+                    [$class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'banana-aws-key']
+                ]) {
 
-            script {
-                env.EC2_IP = sh(
-                    script: '''
-                    cd terraform
+                    sh '''
+                        cd terraform
+                        export AWS_DEFAULT_REGION=eu-north-1
+                        terraform init -input=false -no-color
+                    '''
 
-                    export AWS_DEFAULT_REGION=eu-north-1
+                    script {
+                        env.EC2_IP = sh(
+                            script: '''
+                                cd terraform
+                                terraform output -raw ec2_ip
+                            ''',
+                            returnStdout: true
+                        ).trim()
 
-                    terraform init -input=false -no-color
-
-                    terraform output -raw ec2_ip
-                    ''',
-                    returnStdout: true
-                ).trim()
+                        echo "IP FOUND: ${env.EC2_IP}"
+                    }
+                }
             }
-        } 
-    }
-}
+        }
 
 
         stage('Deploy to EC2') {
