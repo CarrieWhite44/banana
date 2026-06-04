@@ -74,7 +74,7 @@ pipeline {
 
                     ansible-playbook \
                         -i ansible/inventory \
-                        ansible/deploy.yml
+                        ansible/playbook.yml
                     '''
                 }
             }
