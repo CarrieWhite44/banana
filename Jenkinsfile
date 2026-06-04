@@ -57,22 +57,25 @@ pipeline {
                 }
             }
         }
+        stage('Create Inventory') {
+        steps {
+            writeFile file: 'ansible/inventory', text: """
+        [web]
+        ${EC2_IP} ansible_user=ubuntu
+        """
+            }
+        }
 
-
-        stage('Deploy to EC2') {
+        stage('Deploy with Ansible') {
             steps {
                 sshagent(['ubuntu']) {
-                    sh """
-                    ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} '
-                    cd banana-app
-                    
-                    docker compose pull
+                    sh '''
+                    export ANSIBLE_HOST_KEY_CHECKING=False
 
-                    docker compose down
-
-                    docker compose up -d
-                    '
-                    """
+                    ansible-playbook \
+                        -i ansible/inventory \
+                        ansible/deploy.yml
+                    '''
                 }
             }
         }

@@ -1,0 +1,54 @@
+---
+- hosts: web
+  become: yes
+
+  tasks:
+
+    - name: Update apt
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Install Docker Compose plugin
+      apt:
+        name: docker-compose
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+    - name: Create app directory
+      file:
+        path: /home/ubuntu/banana-app
+        state: directory
+    
+    - name: Copy compose file
+      copy:
+        src: ../docker-compose.yml
+        dest: /home/ubuntu/banana-app/docker-compose.yml
+
+    - name: Create nginx directory
+      file:
+        path: /home/ubuntu/banana-app/nginx
+        state: directory
+        
+    - name: Copy nginx config
+      copy:
+        src: ../nginx/default.conf
+        dest: /home/ubuntu/banana-app/nginx/default.conf
+
+    - name: Pull latest image
+      command: docker-compose pull
+      args:
+        chdir: /home/ubuntu/banana-app
+
+    - name: Start containers
+      command: docker-compose up -d
+      args:
+        chdir: /home/ubuntu/banana-app
