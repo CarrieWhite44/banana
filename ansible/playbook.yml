@@ -15,7 +15,7 @@
 
     - name: Install Docker Compose plugin
       apt:
-        name: docker-compose
+        name: docker-compose-v2
         state: present
 
     - name: Start Docker service
@@ -44,11 +44,11 @@
         dest: /home/ubuntu/banana-app/nginx/default.conf
 
     - name: Pull latest image
-      command: docker-compose pull
+      command: docker compose pull
       args:
         chdir: /home/ubuntu/banana-app
 
     - name: Start containers
-      command: docker-compose up -d
+      command: docker compose up -d
       args:
         chdir: /home/ubuntu/banana-app
