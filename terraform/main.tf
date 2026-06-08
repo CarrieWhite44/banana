@@ -27,6 +27,18 @@ resource "aws_security_group" "banana_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+  from_port   = 443
+  to_port     = 443
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = ["2.132.201.73/32"]
+  }
   egress {
     from_port = 0
     to_port = 0
@@ -51,7 +63,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "banana_ec2" {
 
   ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.micro"
+  instance_type = "t3.small"
 
   key_name = "banana"
 

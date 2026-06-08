@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: banana-app
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: banana-app
+
+  template:
+    metadata:
+      labels:
+        app: banana-app
+
+    spec:
+      containers:
+      - name: banana-app
+
+        image: tprff2301/banana-app:latest
+
+        ports:
+        - containerPort: 5000
+
+        envFrom:
+        - configMapRef:
+            name: banana-config
+
+        - secretRef:
+            name: banana-secret

@@ -8,47 +8,43 @@
       apt:
         update_cache: yes
 
-    - name: Install Docker
-      apt:
-        name: docker.io
-        state: present
+    - name: Install k3s
+      shell: curl -sfL https://get.k3s.io | sh -s - \
+       --write-kubeconfig-mode 644
+      args:
+        creates: /usr/local/bin/k3s
 
-    - name: Install Docker Compose plugin
-      apt:
-        name: docker-compose-v2
-        state: present
-
-    - name: Start Docker service
-      service:
-        name: docker
-        state: started
-        enabled: yes
     - name: Create app directory
       file:
         path: /home/ubuntu/banana-app
         state: directory
-    
-    - name: Copy compose file
-      copy:
-        src: ../docker-compose.yml
-        dest: /home/ubuntu/banana-app/docker-compose.yml
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
 
-    - name: Create nginx directory
+    - name: Create k8s directory
       file:
-        path: /home/ubuntu/banana-app/nginx
+        path: /home/ubuntu/banana-app/k8s
         state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
         
-    - name: Copy nginx config
+    
+    - name: Copy k8s files
       copy:
-        src: ../nginx/default.conf
-        dest: /home/ubuntu/banana-app/nginx/default.conf
+        src: /home/carrie/banana/kubernetes/
+        dest: /home/ubuntu/banana-app/k8s/
 
-    - name: Pull latest image
-      command: docker compose pull
-      args:
-        chdir: /home/ubuntu/banana-app
 
-    - name: Start containers
-      command: docker compose up -d
+    - name: Apply 
+      command: kubectl apply -f k8s/
       args:
-        chdir: /home/ubuntu/banana-app
+        chdir: /home/ubuntu/banana-app/
+    
+    - name: Get pods
+      command: kubectl get pods
+      register: pods
+
+    - debug:
+        var: pods.stdout
