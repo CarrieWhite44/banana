@@ -21,7 +21,6 @@ pipeline {
 
         stage('Push') {
             steps {
-
                 withCredentials([
                     usernamePassword(
                         credentialsId: 'banana',
@@ -29,7 +28,6 @@ pipeline {
                         passwordVariable: 'DOCKER_PASS'
                     )
                 ]) {
-
                     sh '''
                     echo $DOCKER_PASS | docker login \
                         -u $DOCKER_USER \
@@ -42,16 +40,13 @@ pipeline {
         }
 
         stage('Deploy') {
-
             steps {
-
                 withCredentials([
                     file(
                         credentialsId: 'kubeconfig',
                         variable: 'KUBECONFIG'
                     )
                 ]) {
-
                     sh '''
                     kubectl set image deployment/banana-app \
                       banana-app=$IMAGE_NAME:$IMAGE_TAG
@@ -61,14 +56,13 @@ pipeline {
                 }
             }
         }
-        post {
-                always {
-                sh '''
-                docker image prune -af || true
-                '''
-                }
-                }
+    }
 
-
+    post {
+        always {
+            sh '''
+            docker image prune -af || true
+            '''
+        }
     }
 }
