@@ -34,7 +34,9 @@
         dest: /home/ubuntu/banana-app/monitoring/
 
     - name: Install Prometheus and Grafana
-      shell: bash install-monitoring.sh
+      shell: |
+        export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+        bash install-monitoring.sh
       args:
         chdir: /home/ubuntu/banana-app/monitoring/
         

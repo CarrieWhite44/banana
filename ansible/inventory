@@ -1,2 +1,2 @@
 [web]
-16.192.82.112 ansible_user=ubuntu ansible_ssh_private_key_file=~/banana.pem
+51.21.54.161 ansible_user=ubuntu ansible_ssh_private_key_file=~/banana.pem

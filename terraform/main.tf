@@ -71,6 +71,11 @@ resource "aws_instance" "banana_ec2" {
     aws_security_group.banana_sg.id
   ]
 
+  root_block_device {
+    volume_size = 30
+    volume_type = "gp3"
+  }
+
   tags = {
     Name = "banana-server"
   }
