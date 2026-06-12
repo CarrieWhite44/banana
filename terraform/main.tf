@@ -63,7 +63,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "banana_ec2" {
 
   ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.small"
+  instance_type = "t3.medium"
 
   key_name = "banana"
 

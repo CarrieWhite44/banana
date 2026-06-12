@@ -14,6 +14,30 @@
       args:
         creates: /usr/local/bin/k3s
 
+    - name: Install Helm
+      shell: |
+        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+      args:
+        creates: /usr/local/bin/helm
+
+    - name: Create monitoring directory
+      file:
+        path: /home/ubuntu/banana-app/monitoring
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Copy monitoring files
+      copy:
+        src: /home/carrie/banana/monitoring/
+        dest: /home/ubuntu/banana-app/monitoring/
+
+    - name: Install Prometheus and Grafana
+      shell: bash install-monitoring.sh
+      args:
+        chdir: /home/ubuntu/banana-app/monitoring/
+        
     - name: Create app directory
       file:
         path: /home/ubuntu/banana-app
