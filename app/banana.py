@@ -4,9 +4,9 @@ from flask_migrate import Migrate
 import os
 from prometheus_flask_exporter import PrometheusMetrics
 
-metrics = PrometheusMetrics(app)
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
 
 DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
